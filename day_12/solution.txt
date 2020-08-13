@@ -1,0 +1,29 @@
+class Solution {
+    public:
+    
+    //Complete the function below!
+    vector<int> getRow(int n) {
+        
+        if(n==0){
+            return {1};
+        }
+        if(n==1){
+            return {1,1};
+        }
+        
+        //Each time we for n rows, we take the sum of two numbers directly above it
+        // [So we can optimise the space to o(n) instead of making matrix of n*rows(variable)]
+        vector<int> result(n+1,1);
+
+        //For the number of rows we fill starting from 1
+        for(int i=1;i<n;i++){
+            //For columns from second last to second[first and last are always 1]
+            for(int j=i;j>0;j--){
+                //As we're filling backwards the effect of 2-d matrix is directly utilised
+                result[j] += result[j-1];
+            }
+        }
+        
+        return result;
+    }
+};
