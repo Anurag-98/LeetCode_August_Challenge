@@ -1,0 +1,44 @@
+class Solution {
+   
+    public:
+    
+    //complete the function below!
+    bool detectCapitalUse(string word) {
+        
+        int len = word.size();
+        if(len==1){
+            return true;
+        }
+        
+        bool isFirstLetterCaps = true;
+        if(word[0]>='a'){
+            isFirstLetterCaps = false;
+        }
+        
+        if(isFirstLetterCaps){
+            //second letter caps(case 1[All Caps])
+            if(word[1]<'a'){
+                for(int i=2;i<len;i++){
+                    if(word[i]>='a'){
+                        return false;
+                    }
+                }
+            //second letter small(case 3[first capital,rest small])
+            }else{
+                for(int i=2;i<len;i++){
+                    if(word[i]<'a'){
+                        return false;
+                    }
+                }
+            }
+        //case 2(All small)
+        }else{
+            for(int i=1;i<len;i++){
+                if(word[i]<'a'){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+};
