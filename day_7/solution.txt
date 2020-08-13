@@ -1,0 +1,96 @@
+//A class to whose object will have 3 properties: x coordinate,y coordinate , element value
+class Triplet{
+    public:
+    
+    int x;
+    int y;
+    int elem;
+    
+    Triplet(int a,int b,int c ){
+        x = a;
+        y = b;
+        elem = c;
+    }
+};
+
+// Our comparator that sorts on priority in :-
+//     [small x, then greater y, then smaller element value ]
+bool myFunc(Triplet const& t1, Triplet const& t2){
+    
+    if(t1.x==t2.x){
+        if(t1.y==t2.y){
+            return t1.elem < t2.elem;
+        }else{
+            return t1.y > t2.y;
+        }
+    }
+    return t1.x < t2.x;
+}
+
+class Solution {
+    
+    public:
+    
+    //Helper function to store all tree nodes in vector along with there x,y coordinates
+    void help(vector<Triplet>& sortedList,TreeNode* root,int x1,int y1){
+        
+        if(root==NULL){
+            return;
+        }
+        Triplet entry(x1,y1,root->val);
+        sortedList.push_back(entry);
+        help(sortedList,root->left,x1-1,y1-1);
+        help(sortedList,root->right,x1+1,y1-1);
+    }
+    
+    
+    //Complete the function below!
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        
+        if(root==NULL){
+            return {{}};
+        }
+        
+        vector<Triplet> sortedList;
+        help(sortedList,root,0,0);
+        
+        //This sorts the vector according to 'myFunc' comparator
+        sort(sortedList.begin(),sortedList.end(),myFunc);
+        
+        //A vector to store the final result!
+        vector<vector<int>> result;
+        
+        int n = sortedList.size();
+        result.push_back({sortedList[0].elem});
+        
+        //A counter to put value in correct position in result
+        int prev=0;
+        
+        for(int i = 1;i<n;i++){
+            
+            //for same x coordinates, put in same place
+            if(sortedList[i].x==sortedList[i-1].x){
+                result[prev].push_back(sortedList[i].elem);
+            }
+            //Else place them in new index
+            else{
+                prev++;
+                result.push_back({sortedList[i].elem});
+            }
+        }
+        
+        return result;
+    }
+};
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
