@@ -1,0 +1,28 @@
+//IDEA : Use the array as hashmap and alter the indexes belonged by array element values!
+
+class Solution {
+    
+    public:
+
+    //Complete the function below!
+    vector<int> findDuplicates(vector<int>& nums) {
+
+        int n = nums.size();
+        if(n==0 || n==1){
+            return {};
+        }
+        
+        vector<int> result;
+        for(int i=0;i<n;i++){
+            int indexCheck = abs(nums[i])%n;
+            
+            //Means Already same index has been visited, marking duplicacy!
+            if(nums[indexCheck]<0){
+                result.push_back(abs(nums[i]));
+            }else{
+                nums[indexCheck] *= -1; 
+            }
+        }
+        return result;
+    }
+};
