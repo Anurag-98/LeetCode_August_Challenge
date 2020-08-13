@@ -1,0 +1,49 @@
+class CombinationIterator {
+    
+    string input;
+    queue<string> combinations;
+    
+    //A function to store all possible lexographical combinations from input of given length(combinationLength)
+    void storeAllCombinations(int startIndex,int len,string currString ){
+        
+        //Base Case(we have required combination in current string)
+        if(len==0){
+            combinations.push(currString);
+            return;
+        }
+        int n = input.size();
+        //A loop to store all possibilities recursively
+        for(int i=startIndex;i<=n-len;i++){
+            storeAllCombinations(i+1,len-1,currString + input[i]);
+        }
+    }
+    
+    public:
+    
+    //Constructor(Store all the possible lexographically next combinations by calling 'storeAllCombinations' function)
+    CombinationIterator(string characters, int combinationLength) {
+        input = characters;
+        string begin = "";
+        storeAllCombinations(0,combinationLength,begin);
+    }
+    
+    string next() {
+        string ans = combinations.front();
+        combinations.pop();
+        return ans;
+    }
+    
+    bool hasNext() {
+        if(!combinations.empty()){
+            return true;
+        }
+        return false;
+    }
+};
+
+/**
+ * Your CombinationIterator object will be instantiated and called as such:
+ * CombinationIterator* obj = new CombinationIterator(characters, combinationLength);
+ * string param_1 = obj->next();
+ * bool param_2 = obj->hasNext();
+ */
