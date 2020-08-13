@@ -1,0 +1,32 @@
+class Solution {
+    
+    public:
+
+    //Complete the function below!
+    int hIndex(vector<int>& citations) {
+
+        int N = citations.size();
+        //Make a bucket that'll work as container for counting freq in range(values in bucket)
+        vector<int> buckets(N+1, 0);
+
+        for(int i : citations){
+            //If value is greater than equal to total size, they are valid candidates for last entry!
+            if (i >= N){
+                buckets[N]++;
+            } else {
+                buckets[i]++;
+            }
+        }
+        
+        int count = 0;
+        for(int i = N; i >= 0; i--){
+            count += buckets[i];
+            if(count >= i) {
+                return i;
+            }
+        }
+
+        // should not reach here(Implies no such citation is present)
+        return 0;
+    }
+};
