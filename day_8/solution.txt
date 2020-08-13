@@ -1,0 +1,44 @@
+
+class Solution {
+    
+    public:
+    
+    //A helper function, that recursively computes the count of paths with root included!
+    int help_incude_root(TreeNode*root, int sum){
+        
+        if(root==NULL){
+            return 0;
+        }
+        int result_count = 0;
+        if(root->val==sum){
+            result_count++;
+        }
+        
+        result_count += help_incude_root(root->left,sum -root->val) + help_incude_root(root->right,sum-root->val);
+        
+        return result_count;
+       
+    }
+
+    //Complete the function below!
+    int pathSum(TreeNode* root, int sum) {
+        
+        if(root==NULL){
+            return 0;
+        }
+        //Call recursion of self to compute paths without root, and call helper recursive function to get paths with root!
+        return pathSum(root->left,sum) + pathSum(root->right,sum) + help_incude_root(root,sum);
+    }
+};
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
