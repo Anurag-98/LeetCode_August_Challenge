@@ -1,0 +1,16 @@
+class Solution {
+    
+    public:
+    
+    //Complete the function below!
+    int titleToNumber(string s) {
+        
+        int ans = 0;
+        while(s.size()){
+            int currCharVal = s[0] - 64;
+            ans = currCharVal + ans*26;
+            s= s.substr(1);
+        }
+        return ans;
+    }
+};
