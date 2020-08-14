@@ -1,0 +1,43 @@
+class Solution {
+    public:
+
+    //Complete the function below
+    int longestPalindrome(string s) {
+        
+        int n = s.size();
+        if(n==0 || n==1){
+            return n;
+        }
+        //A map to store frequency of characters
+        unordered_map<char,int> map;
+        
+        for(int i=0;i<n;i++){
+            map[s[i]]++;
+        }
+        //If only 1 character is present, return it's frequency(i.e the length of input)
+        if(map.size()==1){
+            return map[s[0]];
+        }
+        
+/*  IDEA : [ All even freq characters can contibute completely(by getting half each on both sides of center),
+             & All odd freq characters will contribute 1 less than thier freq(i.e. thier max even freq),
+             just one odd character, by whom center portion will be made can contribute 1 more ]
+*/
+
+        //To store length of maximum size pallindrome that can be made!
+        int len = 0;
+        bool odd_freq_present = false;
+
+        for(auto it : map){
+
+            if(it.second%2==0){
+                len += it.second;
+            }else{
+               odd_freq_present = true;
+                len += it.second-1;
+            }
+        }
+        
+        return odd_freq_present ? len+1 : len;
+    }
+};
