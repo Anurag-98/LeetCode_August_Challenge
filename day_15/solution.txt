@@ -1,0 +1,39 @@
+//Our custom comparator that sorts on basis of ending time of vector(smaller ending time first)
+bool comp(vector<int>const& a, vector<int>const& b) {
+    return (a[1] < b[1]);
+}
+
+class Solution {
+    
+    public:
+    //Complete the function below
+    int eraseOverlapIntervals(vector<vector<int>>& inter) {
+
+        //Edge case(Less than or equal to 1 interval, then no overlap conflicts)
+        if (inter.size() <= 1){
+            return 0;
+        } 
+        
+        //Sorting the intervals
+        sort(inter.begin(), inter.end(), comp);
+
+        int overlap_count = 0;
+        int prev_start = inter[0][0], prev_end = inter[0][1];
+
+        //In this loop from 1st interval(0th we'll include in solution), we check if current interval has lesser
+        // start time than previous end state(means overlapping present),else it imples that this interval can be 
+        // included without issues, and we mark the prev variables to this current one
+        for (int i = 1; i < inter.size(); i++) {
+            
+            int curr_start = inter[i][0], curr_end = inter[i][1];
+
+            if(curr_start < prev_end){
+                overlap_count++;
+            }else{
+                prev_start = curr_start;
+                prev_end = curr_end;
+            }
+        }
+        return overlap_count;
+    }
+};
