@@ -1,0 +1,58 @@
+class Solution {
+    public:
+    
+    //Complete the function below!
+    int maxProfit(vector<int>& prices) {
+        
+        /******    DP APPROACH (Using two 1-D dp's )  ********/
+        
+        int n = prices.size();
+        //At least two days required to buy and sell
+        if(n<=1){
+            return 0;
+        }
+        
+        
+        int minprice = prices[0];
+        int *dpLeftBest= new int[n]{};
+
+        //-->Left Best Value Filling(left to right)
+        //   [Holds maximum profit on i'th day that can be achieved, exculding 
+        //     current(i'th) day's price i.e. best value before current(i'th) day]
+        for (int i = 1; i <n ; i++) {
+            if(prices[i] < minprice){
+                minprice = prices[i];
+            }
+            dpLeftBest[i] = max(prices[i] - minprice,dpLeftBest[i-1]);
+        }
+        
+        
+        int maxTillToday = prices[n-1];
+        int *dpRightBest = new int[n]{};
+
+        //-->right Best Value Filling(right to left)
+        //   [Holds maximum profit on i'th day including current(i'th) day,
+        //     i.e. best value till current(i'th) day ]
+        for(int i=n-2;i>=0;i--){
+            if(prices[i]>maxTillToday){
+                maxTillToday = prices[i];
+            }
+            dpRightBest[i] = max(maxTillToday-prices[i],dpRightBest[i+1]);
+        }
+
+        //Variable to store final best profit!
+        int finalBest = 0;
+        
+        //-->Choose the best option(It will definitely be 2 non overlapping intervals, as
+        //   in both dp's left i'th means before i'th day and right i'th means till i'th)
+        for(int i=0;i<n;i++){
+            finalBest = max(finalBest, dpLeftBest[i]+dpRightBest[i]);
+        }
+        
+        //Free the dynamically allocated memory!
+        delete [] dpLeftBest;
+        delete [] dpRightBest;
+        
+        return finalBest;
+    }
+};
