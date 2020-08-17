@@ -1,0 +1,27 @@
+class Solution {
+    
+    public:
+    
+    //Complete the function below!
+    vector<int> distributeCandies(int candies, int num_people) {
+        
+        //zero candies for each person initially
+        vector<int> result(num_people, 0); 
+           
+        int index=0;
+        // while there are candies left to distribute
+        while (candies > 0){
+            
+            result[index%num_people] += index+1;
+            candies -= index+1;
+            index++;
+        }
+        
+        //last person might get more candies than we had left(Edgy Condition)
+        if (candies < 0){
+            result[(index-1)%num_people] -= abs(candies);
+        } 
+        
+        return result;
+    }
+};
