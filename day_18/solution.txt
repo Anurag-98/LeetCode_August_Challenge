@@ -1,0 +1,48 @@
+class Solution {
+    public:
+    
+    //Complete the function below
+    vector<int> numsSameConsecDiff(int N, int K) {
+        
+        //Base Case(Only in n=1 we can return 0, apart from this there can't be any leading 0 like 00 or 07)
+        if(N==1){
+            return {0,1,2,3,4,5,6,7,8,9};
+        }
+        
+        //Recursion is called for smaller N(contains all n-1 digits answer)
+        vector<int> smallAns = numsSameConsecDiff(N-1,K);
+        int smallAnsSize = smallAns.size();
+        
+        //A vector to store final result
+        vector<int> result;
+
+        //IDEA : , we'll add one digit in end to all previous numbers:
+        //          1) first option will be last digit + K
+        //          2) second option will be last digit - K
+        //          Both the options should be in range i.e. [0-9]
+
+        //NOTE : 1) when evaluating, we'll compute for non zero numbers only(which might be present due to base case)
+        //       2) keeping in mind about edgy case of k=0, both options k+0,k-0 will be ambiguous,so we will put
+                    a (k!=0) on second option
+
+        for(int i=0;i<smallAnsSize;i++){
+            if(smallAns[i]!=0){
+                int lastDigit = smallAns[i]%10;
+                int option1 = ld-K;
+                int option2 = ld+K;
+                if(option1>=0){
+                    int res1 = smallAns[i]*10 + option1;
+                    result.push_back(res1);
+                }
+                if(option2<10 & K!=0){
+                    int res2 = smallAns[i]*10 + option2;
+                    result.push_back(res2);
+                }
+            }
+        }
+        //Return the final formed vector!
+        return result;
+    }
+
+ 
+};
