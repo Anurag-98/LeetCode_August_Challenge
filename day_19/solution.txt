@@ -1,0 +1,65 @@
+/*
+                     APPROACH : 
+            
+    [storing result in seperate string named 'result']
+    
+    1) take a string charA, that'll increase by one 'a', which
+       will be appended at end of each word.
+     
+    2) for each word(Iterate till space is encountered) and for:
+        i) first vowel character, store it and add at end of word in result string
+        ii) for non vowel starting words, strore as it is in result string
+        
+    3) then before moving to next word, append :
+        1) 'ma'
+        2)  charA string which will have suitable amount of 'a'
+        3)  space(check for size in bounds to avoid ending space in case of last word)
+        
+    4) Return the result string
+*/
+
+class Solution {
+    
+    public:
+    
+    //Complete the function below!
+    string toGoatLatin(string s) {
+        
+        int n = s.size();
+        string charA = "a";
+        
+        string result;
+        
+        for(int i=0;i<n;i++){
+            
+            char beginCharacter = s[i];
+            if(beginCharacter == 'a' || beginCharacter == 'e' || beginCharacter == 'i' ||  beginCharacter == 'o' || beginCharacter == 'u' || beginCharacter == 'A' ||  
+                beginCharacter == 'E' || beginCharacter == 'I' || beginCharacter == 'O' ||  beginCharacter == 'U'){
+                
+                while(i<n && s[i]!=' '){
+                    result += s[i];
+                    i++;
+                }
+                
+            }else{
+                
+                char firstChar = s[i];
+                i++;
+                
+                while(i<n && s[i]!=' ' ){
+                    result += s[i];
+                    i++;
+                }
+                result += firstChar;
+            }
+            result += "ma";
+            result += charA;
+            charA += "a";
+            if(i<n){
+                result += ' ';
+            }
+        }
+        
+        return result;
+    }
+};
