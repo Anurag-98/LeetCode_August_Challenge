@@ -1,0 +1,95 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+ /*
+                        APPROACH :
+
+        1) Break the linked list in two parts from mid-point :
+            i.e List : l1->l2->l3->l4   List1 : l1->l2
+                                        List2 : l3->l4
+
+        2) now reverse the second list :
+            List2 : l3->l4  ----->  List2 : l4->l3
+
+        3) now the question becomes merge two linked list alternately :
+
+            List1 : l1->l2       Result List : l1->l4->l2->l3
+            List2 : l4->l3     
+
+
+        4) We have achieved the result:
+
+            summary : i)   l1->l2->l3.......ln
+                      ii)  l1->l2->l3.....ln/2, l(n/2 + 1)->l(n/2 + 2).......l(n-1)->ln
+                      iii) l1->l2->l3.....ln/2, l(n)->l(n-1)->l(n-2).......l(n/2 + 1)
+                      iv)  l1->ln->l2->ln-1............
+ */
+
+class Solution {
+    
+    public:
+    
+    //A recursive function to reverse a linked list and return it's head!
+    ListNode * reverse(ListNode*head){
+        
+        if(head==NULL || head->next==NULL){
+            return head;
+        }
+        ListNode * smallTail = head->next;
+        ListNode*fh = reverse(head->next);
+        smallTail->next = head;
+        head->next = NULL;
+        return fh;
+    }
+    
+    //Complete the function below
+    void reorderList(ListNode* head) {
+        
+        if(head==NULL || head->next==NULL || head->next->next==NULL){
+            return;
+        }
+        
+        //(step 1 of approach)
+        ListNode*slow = head;
+        ListNode*fast = head;
+        
+        while(fast->next && fast->next->next){
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        
+        ListNode*midp = slow->next;
+        slow->next = NULL;
+
+
+        //(step 2 of approach)
+        ListNode* t2 = reverse(midp);
+        
+        ListNode*t1 = head;
+        
+        bool takeFromList1 = true;
+        
+        //[step 3(merging alternately) of approach ]
+        while(t1 && t2){
+            if(takeFromList1){
+                ListNode* t1Next = t1->next;
+                t1->next = t2;
+                t1 = t1Next;
+                takeFromList1 = false;
+            }else{
+                ListNode* t2Next = t2->next;
+                t2->next = t1;
+                t2 = t2Next;
+                takeFromList1 = true;
+            }
+        }
+        return;
+    }
+};
