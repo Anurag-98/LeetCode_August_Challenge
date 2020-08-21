@@ -1,0 +1,55 @@
+/*              APPROACH [2-pointer]
+    
+    (  Time Complexity  : O(N), Space Complexity : O(1)  )
+    
+    --> Take 2 pointers one pointing to start of array, one to last element.
+    
+    --> The idea is we have to put all even elements first, so we'll keep moving the
+        start pointer till we find a problematic element i.e. a odd element in our case
+        
+    --> Similarly we'll find the first even element from right
+    
+    --> swap them both, and keep repeating the process till window size finishes
+    
+    --> we have converted the input array to desired one (even elements followed by odd)
+*/
+class Solution {
+    
+    public:
+        
+    //Complete the function below
+    vector<int> sortArrayByParity(vector<int>& A) {
+        
+        int n = A.size();
+        if(n==1){
+            return A;
+        }
+        
+        //2 pointers
+        int st = 0;
+        int end = n-1;
+        
+        while(st<end){
+            
+            if(A[st]&1){
+                if((A[end]&1)==0){
+                    int temp = A[st];
+                    A[st] = A[end];
+                    A[end] = temp;
+                    st++;
+                    end--;
+                }else{
+                    while(end>=st && A[end]&1){
+                        end--;
+                    }
+                }
+            }else{
+                while(st<=end && (A[st]&1)==0){
+                    st++;
+                }
+            }
+        }
+
+        return A;
+    }
+};
