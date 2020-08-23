@@ -1,0 +1,74 @@
+class Solution {
+    
+    public:
+    
+    vector<int> index_to_pointsArray;
+    int cumulative_points;
+    vector<vector<int>> rects;
+    
+    //A function that returns total points in a rectangle
+    int points_in_rectangle(vector<int>& rectangle_coordinates){
+        
+        int x1 = rectangle_coordinates[0];
+        int y1 = rectangle_coordinates[1];
+        int x2 = rectangle_coordinates[2];
+        int y2 = rectangle_coordinates[3];
+        int width = x2-x1;
+        int height = y2-y1;
+        return (width+1)*(height+1);
+    }
+    
+    //Constructor
+    Solution(vector<vector<int>>& rects) {
+        
+        this->rects = rects;
+        cumulative_points = points_in_rectangle(rects[0]);
+        index_to_pointsArray.push_back(cumulative_points);
+        int n = rects.size();
+        
+        for(int i=1;i<n;i++){
+            int curr_points = points_in_rectangle(rects[i]);
+            cumulative_points += curr_points;
+            index_to_pointsArray.push_back(cumulative_points);
+        }
+    }
+    
+    //function to get index of the rectangle w.r.t. point passed
+    int getting_index_from_binary_search(int random_value ){
+
+        int start = 0;
+        int end = index_to_pointsArray.size()-1;
+        
+        while(start<end){
+            int mid = (start+end)/2;
+            if(index_to_pointsArray[mid]<random_value){
+                start = mid + 1;
+            }else if(index_to_pointsArray[mid]>random_value){
+                end = mid;
+            }else{
+                return mid;
+            }
+        }
+        return start;
+    }
+    
+    vector<int> pick() {
+        
+        //Pick a random value between 1 to cumulative_points
+        int random_point = (rand() % cumulative_points) +1;
+
+        //then find the index corresponding to that random_point
+        int rectangle_index = getting_index_from_binary_search(random_point);
+        
+        //Now we just have to generate a random (x,y) coordinate from this found rectangle
+        int point_num = (rectangle_index)?(random_point - index_to_pointsArray[rectangle_index-1]):random_point;
+        
+        int x_points_range = rects[rectangle_index][2]-rects[rectangle_index][0] + 1;
+        
+        int final_y = rects[rectangle_index][1] +  ((point_num-1)/(x_points_range));
+        
+        int final_x = rects[rectangle_index][0] + point_num - 1 - ((point_num-1)/(x_points_range))*(x_points_range);
+        
+        return {final_x,final_y};
+    }
+};
