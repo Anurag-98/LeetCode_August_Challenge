@@ -1,0 +1,30 @@
+class Solution {
+    
+    public:
+    
+    //Complete the function below!
+    int sumOfLeftLeaves(TreeNode* root) {
+
+        //Base Case 
+        if(root==NULL){
+            return 0;
+        }
+        //Base Case
+        if(root->left==NULL && root->right==NULL){
+            return 0;
+        }
+        
+        //Recursive calls
+        int v1 = sumOfLeftLeaves(root->left);
+        int v2 = sumOfLeftLeaves(root->right);
+        
+        if(root->left){
+            TreeNode*node = root->left;
+            if(node->left==NULL && node->right==NULL){
+                return v1+v2+root->left->val;
+            }
+        }
+        
+        return v1+v2;
+    }
+};
