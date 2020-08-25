@@ -1,0 +1,76 @@
+/*      APPROACH ( Top-Down i.e. memoization )
+
+    --> we have 3 options : 
+    
+        1) we buy one day ticket i.e. costs[0] and then recursively
+           calculate for rest of days!
+                
+                [ costs[0] + recursion(days + 1) ]
+                
+        2) we buy one week ticket i.e. costs[1] and then recursively
+           calculate for days after a week from current day!
+           
+                [ costs[0] + recursion(days + k) ]
+                
+            k = days which gets covered in one week span!
+            
+         3) we buy one month ticket i.e. costs[2] and then recursively
+            calculate for days after a month span from current day!
+            
+                [ costs[0] + recursion(days + k) ],
+                
+            k = days which gets covered in one month span!
+            
+    --> We have to return the best answer, which is minimum of 3 options
+    
+    --> we take a storage(map) to store the results of recursion, to avoid re-calculation
+        and return the final answer!
+*/
+
+class Solution {
+    
+    public:
+    
+    int help(vector<int>& days, vector<int>& costs,int i, int n, unordered_map<int,int>& map){
+        
+        //Base case
+        if(i>=n){
+            return 0;
+        }
+
+        //Using memoised results
+        if(map.count(i)){
+            return map[i];
+        }
+        
+        int option1 = costs[0] + help(days,costs,i+1,n,map);
+        
+        int count7=i;
+        while(count7 < n && days[i] + 7 >days[count7]){
+            count7++;
+        }
+        int option2 = costs[1] + help(days,costs,count7,n,map);
+        
+        int count30=i;
+        while(count30 < n && days[i] + 30 >days[count30]){
+            count30++;
+        }
+        int option3 = costs[2] + help(days,costs,count30,n,map);
+        
+        int ans = min(option1,min(option2,option3));
+
+        map[i] = ans;
+        return ans;
+    }
+    
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        
+        int n = days.size();
+        if(n==1){
+            return costs[0];
+        }
+        
+        unordered_map<int,int> map;
+        return help(days,costs,0,n,map);
+    }
+};
