@@ -1,0 +1,81 @@
+/*      Approach :
+
+    1) take a array to store the input, and sort it according to start points
+
+    2) Now store the indexes of intervals wrt start points in a map from original input
+
+    3) now iterate through sorted input copy, and for every interval find wether there
+        exists a "right" interval i.e. with value of start point >= end of current interval
+
+    4) If value is found put it in correct position in result, by finding index where it is
+       to be put with help of map
+
+    5) return the result vector!
+*/
+
+class Solution {
+    
+    public:
+
+    //Complete the function below
+    vector<int> findRightInterval(vector<vector<int>>& intervals) {
+        
+        int n = intervals.size();
+
+        //edge case
+        if(n==0){
+            return {};
+        }
+        //edge case
+        if(n==1){
+            return {-1};
+        }
+        
+        //A vector that'll store input & will be sorted
+        vector<vector<int>> myArray = intervals;
+        
+        /*A map to store indexes of interval wrt starting points
+          (all starting points are unique)*/
+        unordered_map<int,int> map;
+        
+        //A vector to store final result!
+        vector<int> result(n,-1);
+        
+        for(int i=0;i<n;i++){
+            map[intervals[i][0]] = i;
+        }
+        
+        sort(myArray.begin(),myArray.end());
+        
+        for(int i=0;i<n;i++){
+            
+            int val = myArray[i][1];
+            int st = i+1;
+            int end = n-1;
+            int ansStartingPoint = INT_MAX;
+            
+            //Applying binary search(utilising the sorted array we created)
+            while(st<=end){
+                int mid = (st+end)/2;
+                if(myArray[mid][0]>val){
+                    ansStartingPoint =myArray[mid][0] ;
+                    end = mid-1;
+                }else if(myArray[mid][0]<val){
+                    st = mid+1;
+                }else{
+                    ansStartingPoint=myArray[mid][0] ;
+                    break;
+                }
+            }
+            
+            //If any such point is present, then put corresponding values in result!
+            if(ansStartingPoint!=INT_MAX){
+                int resultMapIndex = map[myArray[i][0]];
+                int resultValueIndex = map[ansStartingPoint];
+                result[resultMapIndex] = resultValueIndex;
+            }
+        }
+        
+        return result;
+    }
+};
