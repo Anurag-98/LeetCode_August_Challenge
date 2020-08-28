@@ -1,0 +1,45 @@
+// The rand7() API is already defined for you.
+// int rand7();
+// @return a random integer in the range 1 to 7
+
+/*                          APPROACH :
+
+    1) As we can't achieve value uniformly from range 1-7 as interval
+        span is of 7 numbers, we need some uniform interval span with
+        minimum 10 elements to cover all range equally.
+        
+    2) as we have to use rand7, we can use it like:
+            
+        (rand7()-1)*7 + (rand7()-1) , to achieve a range of 0-48
+            
+    3) now to select a uniform interval from these 49 numbers of size 10,
+        we can select at max 4 intervals[0-9,10-19,20-29,30-39]
+        
+    4) we cannot take 40-48 as it has 9 numbers in interval, so we can't
+        obtain uniform result of 1-10 with 9 elements
+        
+    5) thus when we generate value, and if it's more than or equal to 40
+        then we'll discard and recalculate till we get a value less than 40 
+        
+    6) finally we need to convert this value in range 1-10, which can be done by:
+    
+        i) taking modulo 10---> which gives number range of 0-9 
+        ii) Adding 1 to make range of 0-9 ---> 1-10
+*/
+
+class Solution {
+    
+    public:
+    
+    int rand10() {
+        
+        int val_between_0_and_48 = (rand7()-1)*7 + (rand7()-1);
+        while(val_between_0_and_48>=40){
+            val_between_0_and_48 = (rand7()-1)*7 + (rand7()-1);
+        }
+        
+        int ans = (val_between_0_and_48)%10 + 1;
+        
+        return ans;
+    }
+};
