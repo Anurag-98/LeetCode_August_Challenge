@@ -1,0 +1,65 @@
+/*                  IDEA : 
+
+    -->Root(the node to be deleted) can be replaced by either:
+        1) just smaller(maximum value node in left subtree)
+        2) just greater(minimum value node in right subtree)
+        
+    --> So, reach at the node which is to be deleted, then replace
+        root by any of two(leftMax,rightMin) and call recursion to delete that node
+        in that particular subtree
+*/
+class Solution {
+    
+    int leftMaxNode(TreeNode* root){
+        root = root->left;
+        while(root->right){
+            root = root->right;
+        } 
+        return root->val;
+    }
+    
+    int rightMinNode(TreeNode* root){
+        root = root->right;
+        while(root->left){
+           root = root->left; 
+        } 
+        return root->val;
+    }
+    
+public:
+    TreeNode* deleteNode(TreeNode* root, int key) {
+        if(root==NULL){
+          return root;  
+        } 
+        
+        //searching for node to be deleted using bst property
+        if(key > root->val){
+            
+            root->right = deleteNode(root->right, key);
+            
+        }else if(key < root->val){
+            
+            root->left = deleteNode(root->left, key);
+            
+        }else{
+            
+            //If leaf node, then make it null 
+            if(!root->left && !root->right){
+                
+                root = nullptr;
+                
+            }else if(root->left){ 
+                //find the max node in left subtree, which can replace the root
+                root->val = leftMaxNode(root);
+                //Now make that as root, and call delete on that recursively
+                root->left = deleteNode(root->left, root->val);
+            }else { 
+                //find the min node in right subtree, which can replace the root
+                root->val = rightMinNode(root);
+                //Now make that as root, and call delete on that recursively
+                root->right = deleteNode(root->right, root->val);
+            }
+        }
+        return root;
+    }
+};
