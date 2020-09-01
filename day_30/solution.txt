@@ -1,0 +1,55 @@
+//IDEA : Using concept of union-find & disjoint sets
+    //     (put all elements and their factors in unions, making either one as parent)
+    
+    //recursive function to find parent, till we reach super top
+    //(which we have initialised by -1)
+    int find_parent(int x, vector<int>& parent){
+        //Starting point
+        if(parent[x]==-1){
+            return x;
+        } 
+        parent[x] = find_parent(parent[x], parent);
+        return parent[x];
+    }
+    
+    /*A function that makes union[i.e. alocate one as parent(putting in same component)
+                                  of other,if both does not belong to same parent already]*/
+    void make_union(int x, int y, vector<int>& parent){
+        int xp = find_parent(x, parent);
+        int yp = find_parent(y, parent);
+        if(xp != yp)
+            parent[yp] = xp;
+    }
+    
+    public: 
+    
+    //Complete the function below!
+    int largestComponentSize(vector<int>& A){
+        
+        vector<int> parent(100001, -1);
+        
+        //iterating over input vector
+        for(int x:A){
+            
+            //loop To find all unique factors and put them in suitable components
+            for(int i = 2; i <= sqrt(x); ++i){
+                if(x % i == 0){
+                    make_union(i, x, parent);
+                    make_union(x, x/i, parent);
+                }
+            }
+        }
+        
+        //Variable to see which component has maximum elements
+        int count = 0;
+        //A storage to hold count of components vs their parents!
+        unordered_map<int, int> map;
+        for(int x:A){
+            int xp = find_parent(x, parent);
+            count = max(count, 1 + map[xp]);
+            map[xp] += 1;
+        }
+        return count;
+    }
+    
+};
